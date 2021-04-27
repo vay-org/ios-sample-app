@@ -1,0 +1,46 @@
+.DS_Store
+.Trashes
+*.swp
+
+*~.nib
+DerivedData/
+build/
+
+/Frameworks/
+/Products/
+
+# SOMETIMES you need to put this file in version control.
+# Apple designed it poorly - if you use "custom executables", they are
+#  saved in this file.
+# 99% of projects do NOT use those, so they do NOT want to version control this file.
+#  ..but if you're in the 1%, comment out the line "*.pbxuser"
+*.pbxuser
+
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+#    NB: also, whitelist the default ones, some projects need to use these
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+
+# Apple Shared data that Apple put in the wrong folder
+# c.f. http://stackoverflow.com/a/19260712/153422
+#     FROM ANSWER: Apple says "don't ignore it"
+#     FROM COMMENTS: Apple is wrong; Apple code is too buggy to trust; there are no known negative side-effects to ignoring Apple's unofficial advice and instead doing the thing that actively fixes bugs in Xcode
+# Up to you, but ... current advice: ignore it.
+*.xccheckout
+
+#     throw away ALL personal settings (including custom schemes!
+#     - unless they are "shared")
+xcuserdata/
+
+####
+# Xcode 4 - Deprecated classes
+#
+# Allegedly, if you manually "deprecate" your classes, they get moved here.
+#
+# We're using source-control, so this is a "feature" that we do not want!
+*.moved-aside
