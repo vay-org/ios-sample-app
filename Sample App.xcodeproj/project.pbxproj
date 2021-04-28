@@ -17,6 +17,7 @@
 		5EBE18CC263955170041FF46 /* VayUnifiedProtocol in Frameworks */ = {isa = PBXBuildFile; productRef = 5EBE18CB263955170041FF46 /* VayUnifiedProtocol */; };
 		5EBE18E026395F610041FF46 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE18DF26395F610041FF46 /* FrameExtractor.swift */; };
 		5EBE18E32639614B0041FF46 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE18E22639614B0041FF46 /* VisualizerView.swift */; };
+		5EC8A51E2639B19300AE1284 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5EC8A51D2639B19300AE1284 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		5EBE18C92639534B0041FF46 /* swift */ = {isa = PBXFileReference; lastKnownFileType = folder; name = swift; path = ../../modules/swift; sourceTree = "<group>"; };
 		5EBE18DF26395F610041FF46 /* FrameExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		5EBE18E22639614B0041FF46 /* VisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizerView.swift; sourceTree = "<group>"; };
+		5EC8A51D2639B19300AE1284 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +51,7 @@
 		5E960ABF263876D400FE2891 = {
 			isa = PBXGroup;
 			children = (
+				5EC8A51D2639B19300AE1284 /* README.md */,
 				5EBE18C6263952540041FF46 /* Frameworks */,
 				5E960AE126387D8400FE2891 /* .gitignore */,
 				5E960ACA263876D400FE2891 /* Sample App */,
@@ -150,6 +153,7 @@
 			files = (
 				5E960AE226387D8400FE2891 /* .gitignore in Resources */,
 				5E960AD8263876D500FE2891 /* LaunchScreen.storyboard in Resources */,
+				5EC8A51E2639B19300AE1284 /* README.md in Resources */,
 				5E960AD5263876D500FE2891 /* Assets.xcassets in Resources */,
 				5E960AD3263876D400FE2891 /* Main.storyboard in Resources */,
 			);
