@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  Sample App
 //
-//  Created by Vay Sports on 27.04.21.
+//  Created by Vay on 27.04.21.
 //
 
 import UIKit
