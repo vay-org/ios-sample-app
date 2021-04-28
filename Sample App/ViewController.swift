@@ -9,6 +9,16 @@ import VayUnifiedProtocol
 import UIKit
 import AVFoundation
 
+/** The view controller periodically receives images from the frame extractor, which it displayes within the preview image view. Once a server connection has been established 'isConnected' is set to true.
+	Images are only sent if 'isConnected' and 'receivedResponse' are both true. Once the image has
+	been sent 'receivedResponse' is set to false until a response is received.
+	Since the images received are from the front cam, they are mirrored horizontally. In order to get
+	correct feedback for left/right arm/leg etc., the images must be flipped to their original state.
+	Note that the received keypoints must be flipped accordingly, before they are visualized on the
+	mirrored preview.
+	Since the received images are too large to be sent, they must be scaled down and an appropriate
+	ratio calculated in order to scale the keypoints back up for visualization.
+	Before being sent, the images need to be converted to a UInt8 array format. */
 class ViewController: UIViewController, FrameExtractorDelegate {
 	
 	var frameExtractor: FrameExtractor!
@@ -18,16 +28,15 @@ class ViewController: UIViewController, FrameExtractorDelegate {
 	private let metaSessionQueue = DispatchQueue(label: "metadata queue")
 	var isConnected: Bool = false
 	var receivedResponse: Bool  = true // Initially true to allow the first send.
-	var readyForRequest: Bool = true
 	var correctReps: Int32 = 0
 	var metricInfoPerRep: Array<VaySports_Vup_MetricMessage> = []
-	var ExerciseKey: Int64 = 1
+	var ExerciseKey: Int64 = 1 // Key 1 = Squat
 	var currentImageData: [UInt8]!
 	
 	@IBOutlet weak var overlay: VisualizerView!
 	@IBOutlet weak var preview: UIImageView!
 	@IBOutlet weak var repsCount: UILabel!
-	@IBOutlet weak var positioningText: UILabel!
+	@IBOutlet weak var exerciseText: UILabel!
 	@IBOutlet weak var feedbackText: UILabel!
 	
 	// Camera frames are received here periodically.
@@ -55,6 +64,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		UIApplication.shared.isIdleTimerDisabled = true
+		// Disables screen standby when idle.
 		frameExtractor = FrameExtractor()
 		frameExtractor.delegate = self
 		metaSessionQueue.async {
@@ -79,6 +89,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
 		let uid:String = "iosSampleApp"
 		let key:Int64 = ExerciseKey
 		let taskType:KeyType = KeyType.exercise
+		// Should always be set to type exercise.
 		do {
 			client = try VayClient(uri: url)
 		} catch {
@@ -99,7 +110,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
 			print(errorResponse.message!.errorType)
 		}
 		client.onMetadataResponse = { client, response in
-			self.isConnected = true
+			self.isConnected = true // Triggers first image send.
 		}
 		client.onImageInterpolatedResponse = { client, message in
 			let responsePoints:VaySports_Vup_HumanPoints = message.message!.points
@@ -131,7 +142,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
 			if !message.message!.hasPoints {
 				print("No Points received in imageMessage!")
 			} else {
-				self.positioningText.text = message.message?.currentMovement
+				self.exerciseText.text = message.message?.currentMovement
 				self.receivedResponse = true
 				let responsePoints:VaySports_Vup_HumanPoints = message.message!.points
 				let pointsArray:[VaySports_Vup_Point] = [
@@ -170,13 +181,16 @@ class ViewController: UIViewController, FrameExtractorDelegate {
 	
 	func readMistakes (repInfo: VupRepetitionEventData) {
 		metricInfoPerRep = repInfo.metricInfo
+		// A list of violated metrics, for this rep. If empty the rep was
+		// performed correctly.
 		if !metricInfoPerRep.isEmpty {
 			feedbackText.text = metricInfoPerRep[0].correction
+			// Display one of possibly multiple corrections.
 			feedbackText.backgroundColor = UIColor.red
 		} else {
 			feedbackText.text = "Great job!"
 			feedbackText.backgroundColor = UIColor.green
-			correctReps += 1
+			correctReps += 1 // Here only correct reps are counted.
 			repsCount.text = "\(correctReps)"
 		}
 	}

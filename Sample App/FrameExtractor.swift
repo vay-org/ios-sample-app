@@ -4,8 +4,10 @@
 //
 //  Created by Vay on 28.04.21.
 //
-//	This class was copied from the following article:
+//	This class was taken from the following medium post:
 //	https://medium.com/ios-os-x-development/ios-camera-frames-extraction-d2c0f80ed05a
+// This class has been left mostly undocumented, therefore if you wish to
+// gain more insight on it, please take a look at the article above.
 //
 
 import AVFoundation
@@ -18,7 +20,7 @@ protocol FrameExtractorDelegate: class {
 class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 
 	private let position = AVCaptureDevice.Position.front
-	private let quality = AVCaptureSession.Preset.medium
+	private let quality = AVCaptureSession.Preset.medium // Configure quality preset here.
 
 	private var permissionGranted = false
 	private let sessionQueue = DispatchQueue(label: "session queue")
@@ -74,7 +76,7 @@ class FrameExtractor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
 		guard let connection = videoOutput.connection(with: AVFoundation.AVMediaType.video) else { return }
 		guard connection.isVideoOrientationSupported else { return }
 		guard connection.isVideoMirroringSupported else { return }
-		connection.videoOrientation = .portrait
+		connection.videoOrientation = .portrait // Configure orientation here.
 		connection.isVideoMirrored = position == .front
 	}
 	

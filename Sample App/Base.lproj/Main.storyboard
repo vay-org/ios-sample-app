@@ -83,9 +83,9 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="exerciseText" destination="g2D-A2-LIr" id="Vxb-I4-MWW"/>
                         <outlet property="feedbackText" destination="jAr-tg-vuY" id="jbJ-Hq-7Ye"/>
                         <outlet property="overlay" destination="iGM-LM-xC5" id="Ij5-5T-deF"/>
-                        <outlet property="positioningText" destination="g2D-A2-LIr" id="Vxb-I4-MWW"/>
                         <outlet property="preview" destination="5o9-WY-4t4" id="IZ5-Uw-UR0"/>
                         <outlet property="repsCount" destination="5iV-fo-52T" id="EzE-TJ-IkQ"/>
                     </connections>
