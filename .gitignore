@@ -15,6 +15,10 @@ build/
 *.mode2v3
 *.perspectivev3
 
+*.xcuserstate
+*.xcworkspace/
+project.xcworkspace/
+
 !default.pbxuser
 !default.mode1v3
 !default.mode2v3
