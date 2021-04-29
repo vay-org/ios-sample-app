@@ -14,7 +14,7 @@ Note that screen rotation is not handled and therefore the apps orientation is l
 
 Also feel free to change the exercise key to test other exercises.
 
-### Important: The server address has been ommited, as this is a publicly accessable repo.
+###### Important: The server address has been ommited, as this is a publicly accessable repo.
 
 [1]: https://api.docs.vay.ai/
 [2]: https://medium.com/ios-os-x-development/ios-camera-frames-extraction-d2c0f80ed05a
