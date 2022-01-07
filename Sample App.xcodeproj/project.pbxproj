@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E3EE5A127873B7E00260113 /* SwiftClient in Frameworks */ = {isa = PBXBuildFile; productRef = 5E3EE5A027873B7E00260113 /* SwiftClient */; };
 		5E960ACC263876D400FE2891 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E960ACB263876D400FE2891 /* AppDelegate.swift */; };
 		5E960ACE263876D400FE2891 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E960ACD263876D400FE2891 /* SceneDelegate.swift */; };
 		5E960AD0263876D400FE2891 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E960ACF263876D400FE2891 /* ViewController.swift */; };
@@ -14,13 +15,13 @@
 		5E960AD5263876D500FE2891 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E960AD4263876D500FE2891 /* Assets.xcassets */; };
 		5E960AD8263876D500FE2891 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E960AD6263876D500FE2891 /* LaunchScreen.storyboard */; };
 		5E960AE226387D8400FE2891 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5E960AE126387D8400FE2891 /* .gitignore */; };
-		5EBE18CC263955170041FF46 /* VayUnifiedProtocol in Frameworks */ = {isa = PBXBuildFile; productRef = 5EBE18CB263955170041FF46 /* VayUnifiedProtocol */; };
 		5EBE18E026395F610041FF46 /* FrameExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE18DF26395F610041FF46 /* FrameExtractor.swift */; };
 		5EBE18E32639614B0041FF46 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBE18E22639614B0041FF46 /* VisualizerView.swift */; };
 		5EC8A51E2639B19300AE1284 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5EC8A51D2639B19300AE1284 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		18B8D2BB2786E5ED003AB381 /* SwiftClient */ = {isa = PBXFileReference; lastKnownFileType = folder; path = SwiftClient; sourceTree = "<group>"; };
 		5E960AC8263876D400FE2891 /* Sample App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sample App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E960ACB263876D400FE2891 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5E960ACD263876D400FE2891 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,7 +31,6 @@
 		5E960AD7263876D500FE2891 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E960AD9263876D500FE2891 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E960AE126387D8400FE2891 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		5EBE18C92639534B0041FF46 /* swift */ = {isa = PBXFileReference; lastKnownFileType = folder; name = swift; path = ../../modules/swift; sourceTree = "<group>"; };
 		5EBE18DF26395F610041FF46 /* FrameExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameExtractor.swift; sourceTree = "<group>"; };
 		5EBE18E22639614B0041FF46 /* VisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizerView.swift; sourceTree = "<group>"; };
 		5EC8A51D2639B19300AE1284 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -41,7 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5EBE18CC263955170041FF46 /* VayUnifiedProtocol in Frameworks */,
+				5E3EE5A127873B7E00260113 /* SwiftClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +86,7 @@
 		5EBE18C6263952540041FF46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5EBE18C92639534B0041FF46 /* swift */,
+				18B8D2BB2786E5ED003AB381 /* SwiftClient */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -108,7 +108,7 @@
 			);
 			name = "Sample App";
 			packageProductDependencies = (
-				5EBE18CB263955170041FF46 /* VayUnifiedProtocol */,
+				5E3EE5A027873B7E00260113 /* SwiftClient */,
 			);
 			productName = "Sample App";
 			productReference = 5E960AC8263876D400FE2891 /* Sample App.app */;
@@ -374,9 +374,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5EBE18CB263955170041FF46 /* VayUnifiedProtocol */ = {
+		5E3EE5A027873B7E00260113 /* SwiftClient */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = VayUnifiedProtocol;
+			productName = SwiftClient;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

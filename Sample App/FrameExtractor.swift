@@ -13,7 +13,7 @@
 import AVFoundation
 import UIKit
 
-protocol FrameExtractorDelegate: class {
+protocol FrameExtractorDelegate: AnyObject {
 	func captured(image: UIImage)
 }
 
