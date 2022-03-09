@@ -2,7 +2,6 @@
 //  VisualizerView.swift
 //  Sample App
 //
-//  Created by Vay Sports on 28.04.21.
 //
 
 import Foundation
@@ -20,8 +19,6 @@ class VisualizerView : UIView {
 	var imgWidth: Double!
 	var scaleX: CGFloat!
 	var scaleY: CGFloat!
-	// Set the threshold for the confidence score here.
-	let threshold: Double = 0.6
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -33,12 +30,12 @@ class VisualizerView : UIView {
 	}
 	
 	override func draw(_ rect: CGRect) {
-		if !points.isEmpty {
+		if points.isEmpty {
 			return
 		}
 		guard let context = UIGraphicsGetCurrentContext() else { return }
 		for connector in coordinates {
-			if (points[connector.0].score > threshold) && (points[connector.1].score > threshold) {
+			if (points[connector.0].isAccurate) && (points[connector.1].isAccurate) {
 				// Draws the points and connects the lines, while
 				// scaling the values back up and flipping the
 				// points horizontally to match the mirrored preview.

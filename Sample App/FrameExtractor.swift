@@ -2,7 +2,6 @@
 //  FrameExtractor.swift
 //  Sample App
 //
-//  Created by Vay on 28.04.21.
 //
 //	This class was taken from the following medium post:
 //	https://medium.com/ios-os-x-development/ios-camera-frames-extraction-d2c0f80ed05a
