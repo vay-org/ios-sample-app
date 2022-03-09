@@ -2,97 +2,164 @@
 //  ViewController.swift
 //  Sample App
 //
-//  Created by Vay on 27.04.21.
 //
 
 import UIKit
 import AVFoundation
 import SwiftClient
 
-/** The view controller periodically receives images from the frame extractor, which it displayes within the preview image view. Once a server connection has been established 'isConnected' is set to true.
-	Images are only sent if 'isConnected' and 'receivedResponse' are both true. Once the image has
-	been sent 'receivedResponse' is set to false until a response is received.
-	Since the images received are from the front cam, they are mirrored horizontally. In order to get
-	correct feedback for left/right arm/leg etc., the images must be flipped to their original state.
-	Note that the received keypoints must be flipped accordingly, before they are visualized on the
-	mirrored preview.
-	Since the received images are too large to be sent, they must be scaled down and an appropriate
-	ratio calculated in order to scale the keypoints back up for visualization.
-	Before being sent, the images need to be converted to a UInt8 array format. */
+/**
+	This class serves as a minimalistic implementation example on how to use our Swift-Client.
+	On initialization, an exercise session is configured. The frameExtractor class feeds images from the camera.
+	These are preprocessed and enqueued for sending. Event callbacks are defined within this class and it is
+	passed as listener to the analyser. For further documentation go to https://docs.vay.ai
+ */
 class ViewController: UIViewController, FrameExtractorDelegate, VayListener {
 	
-	var frameExtractor: FrameExtractor!
-	var analyser: VayAnalyser!
+	var frameExtractor: FrameExtractor?
+	var analyser: VayAnalyser?
 	var scaleX: CGFloat = 1
 	var scaleY: CGFloat = 1
-	private let metaSessionQueue = DispatchQueue(label: "metadata queue")
-	var isConnected: Bool = false
-	var receivedResponse: Bool  = true // Initially true to allow the first send.
-	var correctReps: Int32 = 0
+	private let sessionSetupQueue = DispatchQueue(label: "session setup queue")
+	var correctRepetitions: Int32 = 0
+	var state: VaySessionState = VaySessionState.noHuman
 	
 	@IBOutlet weak var overlay: VisualizerView!
 	@IBOutlet weak var preview: UIImageView!
-	@IBOutlet weak var repsCount: UILabel!
-	@IBOutlet weak var exerciseText: UILabel!
+	@IBOutlet weak var repetitionCount: UILabel!
+	@IBOutlet weak var stateText: UILabel!
 	@IBOutlet weak var feedbackText: UILabel!
 	
 	// Camera frames are received here periodically.
 	func captured(image: UIImage) {
-		preview.image = image // Set image for preview.
-		let flippedImage: UIImage = image.flipHorizontally()!
-		// Since images from the front cam are mirrored automatically,
+		preview.image = image // Pass image to preview.
+		// Since images from the front camera are mirrored automatically,
 		// we need to flip them back to the 'natural' state, in order to
 		// get correct feedback for left/right sided corrections.
+		guard let flippedImage: UIImage = image.flipHorizontally() else {
+			print("Image flipping failed!")
+			return
+		}
+		// Down scale the image while preserving its aspect ratio.
 		let scaledImage: UIImage = flippedImage.scaleToHeight(image: image, newHeight: 384)
-		// Down scale image while preserving aspect ratio.
+		// Calculate scaling factor for visualization of keypoints.
 		let frameSize = preview.frame.size
 		let scaledSize = scaledImage.size
 		self.scaleX = frameSize.width / scaledSize.width
 		self.scaleY = frameSize.height / scaledSize.height
-		// Calculate scaling factor for visualization of keypoints.
 		guard let imageData = scaledImage.jpegData(compressionQuality: 0.1) else {
 			print("JPEG conversion failed!")
 			return
 		}
+		guard let analyser = analyser else {
+			print("Analyser is nil!")
+			return
+		}
+		// Enqueue image data for sending.
 		analyser.enqueue(input: AnalyserFactory.createInput(for: imageData))
 	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		UIApplication.shared.isIdleTimerDisabled = true
 		// Disables screen standby when idle.
+		UIApplication.shared.isIdleTimerDisabled = true
 		frameExtractor = FrameExtractor()
+		guard let frameExtractor = frameExtractor else {
+			print("Frame extractor initialization failed!")
+			return
+		}
 		frameExtractor.delegate = self
-		metaSessionQueue.async {
+		// Initialize session setup.
+		sessionSetupQueue.async {
 			self.makeClientAndListeners()
+		}
+		// UI related setup.
+		DispatchQueue.main.async {
+			self.feedbackText.layer.borderWidth = 2.0
+			self.feedbackText.layer.cornerRadius = 4
+			self.feedbackText.layer.borderColor = UIColor.white.cgColor
+			self.stateText.layer.borderWidth = 3.0
+			self.stateText.layer.cornerRadius = 6
+			self.stateText.layer.borderColor = UIColor.white.cgColor
 		}
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
-		analyser.stop()
-		frameExtractor.stopSession()
 		UIApplication.shared.isIdleTimerDisabled = false
+		if let analyser = analyser {
+			analyser.stop()
+		}
+		if let frameExtractor = frameExtractor {
+			frameExtractor.stopSession()
+		}
 	}
 	
-	// Creates the Vay client and defines each listener before connecting.
-	// The listeners handle server responses.
+	// Creates the session's analyser.
 	func makeClientAndListeners() {
-		// url that will be provided. Fetch this from your backend!
+		// Our url that will be provided. Fetch this from your backend!
 		let url = "rpcs://<hostname>:<port>"
-		// api key for authentication. Fetch from your backend!
+		// The api key for authentication. Fetch from your backend!
 		let apiKey = "API-KEY"
-		// Choose a name unique to your organisation or application.
-		let exerciseKey = 1 // key of the exercise to analyse
+		// The key of the exercise to analyse (1 = Squat).
+		let exerciseKey = 1
+		// Here 'self' is passed as listener with the event callbacks defined below.
 		analyser = AnalyserFactory.createStreamingAnalyser(url: url,
-			apiKey: apiKey, exerciseKey: exerciseKey,
-			listener: self)
+			apiKey: apiKey, exerciseKey: exerciseKey, listener: self)
 	}
-
-	// If you want to visualize the keypoints, do it from here
-	// Use this listener exclusively for visualization.
+	
+	// Event callbacks:
+	
+	/*
+	When the session state changes, the VaySessionStateChangedEvent is received
+	with the new VaySessionState. The VaySessionState can be in one of the
+	following states:
+		noHuman - No human can be recognized in the provided image.
+		positioning - The starting position has not been reached by the user.
+		exercising - The starting position is fulfilled by the user.
+	 */
+	func onSessionStateChanged(_ event: VaySessionStateChangedEvent) {
+		let previousState = state
+		// Get the session state
+		state = event.sessionState
+		// UI changes according to state.
+		DispatchQueue.main.async {
+			self.stateText.text = String(describing: self.state).capitalized
+			switch (self.state) {
+			case VaySessionState.noHuman:
+				self.stateText.layer.borderColor = UIColor.orange.cgColor
+					break
+			case VaySessionState.positioning:
+				self.stateText.layer.borderColor = UIColor.yellow.cgColor
+				break
+			case VaySessionState.exercising:
+				self.stateText.layer.borderColor = UIColor.green.cgColor
+			}
+		}
+		// Display a success message when exercising state has been reached.
+		if (previousState == VaySessionState.positioning &&
+			state == VaySessionState.exercising) {
+			DispatchQueue.main.async {
+				self.feedbackText.text = "Positioning successful!"
+				self.feedbackText.layer.borderColor = UIColor.green.cgColor
+			}
+		}
+		if (previousState == VaySessionState.exercising &&
+			state == VaySessionState.positioning) {
+			DispatchQueue.main.async {
+				self.feedbackText.layer.borderColor = UIColor.white.cgColor
+			}
+		}
+	}
+	
+	/*
+	 The VayPoseEvent is called when the human pose estimation analysed an image
+	 and returns the results. The event includes a VayPose, that contains the
+	 VayPoint for each VayBodyPointType. If you want to visualize the keypoints,
+	 do it from here.
+	*/
 	func onPose(_ event: VayPoseEvent) {
-		// Get the points for each body point type
+		// Get the points for each body point type.
 		let points = event.pose
 		let pointsArray = [
 			points[VayBodyPointType.nose]!,
@@ -115,76 +182,101 @@ class ViewController: UIViewController, FrameExtractorDelegate, VayListener {
 			points[VayBodyPointType.rightAnkle]!,
 			points[VayBodyPointType.midHip]!
 		]
-		self.overlay.setPoints(pointsArray: pointsArray, xScale: self.scaleX, yScale: self.scaleY, imgWidth: self.preview.frame.size.width)
-		self.overlay.setNeedsDisplay() // Redraws the visualizing layer.
-	}
-
-	// Metric values can be analysed here.
-	func onMetricValues(_ event: VayMetricValuesEvent) {
-		// Get the metric values
-		_ = event.metricValues
-	}
-
-	// Feedbacks are received here.
-	func onFeedback(_ event: VayFeedbackEvent) {
-		// Get a list of feedbacks
-		_ = event.feedbacks
-	}
-
-	// Any logic that evaluates repetitions can go here
-	func onRepetition(_ event: VayRepetitionEvent) {
-		// Get the duration of the repetition
-		_ = event.repetition.duration
-		// Get all feedbacks that occurred during this repetition
-		let feedbacks = event.repetition.feedbacks
-		//If empty the rep was performed correct.
-		if feedbacks.isEmpty {
-			feedbackText.text = "Great job!"
-			feedbackText.backgroundColor = UIColor.green
-			correctReps += 1 // Here only correct reps are counted.
-			repsCount.text = "\(correctReps)"
-		} else {
-			feedbackText.text = feedbacks[0].messages[0]
-			// Display one of possibly multiple corrections.
-			feedbackText.backgroundColor = UIColor.red
+		DispatchQueue.main.async {
+			self.overlay.setPoints(pointsArray: pointsArray, xScale: self.scaleX, yScale: self.scaleY, imgWidth: self.preview.frame.size.width)
+			self.overlay.setNeedsDisplay() // Redraws the visualizing layer.
 		}
 	}
 
-	// Analyse the occurred error here
+	/*
+	Real time feedback is received here. While not in exercising state, the
+	feedback received here can be used as positioning guidance, as seen below.
+	During exercising, immediate feedback related to the exercise is received here.
+	*/
+	func onFeedback(_ event: VayFeedbackEvent) {
+		let feedback = event.feedbacks
+		if (state != VaySessionState.exercising && !feedback.isEmpty) {
+			// Here the first of possibly multiple corrections is selected.
+			let positioningGuidance = feedback[0].messages[0]
+			DispatchQueue.main.async {
+				self.feedbackText.text = positioningGuidance
+			}
+		}
+	}
+
+	/*
+	 After every recognized repetition, a VayRepetitionEvent providing the
+	 TimeInterval of the repetition and a list of all VayFeedback that were
+	 received during the duration.
+	*/
+	func onRepetition(_ event: VayRepetitionEvent) {
+		// Get all feedback that occurred during this repetition.
+		let feedbacks = event.repetition.feedbacks
+		if feedbacks.isEmpty {
+			// If no feedback is received, the repetition was performed correctly.
+			// Here only correct repetitions are counted.
+			correctRepetitions += 1
+			DispatchQueue.main.async {
+				self.repetitionCount.text = "\(self.correctRepetitions)"
+				self.feedbackText.text = "Great job!"
+				self.feedbackText.layer.borderColor = UIColor.green.cgColor
+			}
+		} else {
+			// Here the first of possibly multiple corrections is displayed.
+			DispatchQueue.main.async {
+				self.feedbackText.text = feedbacks[0].messages[0]
+				self.feedbackText.layer.borderColor = UIColor.red.cgColor
+			}
+		}
+	}
+
+	/*
+	 Should an error occur, the error event will contain information about it.
+	 Possible error types are:
+		serverError
+		invalidInput
+		connectionError
+		timeout
+		other
+	*/
 	func onError(_ event: VayErrorEvent) {
-		// Get the error
 		let error = event.error
-		// Display the error reason
+		// Log the error type.
 		print("Error reason: \(error)")
 	}
-
-	// When the session is configured and ready, the exercise including all
-	// metrics is received
-	func onReady(_ event: VayReadyEvent) {
-		// Get the exercise name
-		_ = event.exercise.name
-		// Get the exercise key
-		_ = event.exercise.key
-		// Get the metrics
-		_ = event.exercise.metrics
-	}
-
-	// Information that the analyser has been stopped
+	
+	/*
+	 Called when the analyser is stopped.
+	*/
 	func onStop() {
 		print("Analyser stopped!")
 	}
 
-	// When the session state changes e.g. from POSITIONING to EXERCISING the
-	// new state can be stored here
-	func onSessionStateChanged(_ event: VaySessionStateChangedEvent) {
-		// Get the session state
-		_ = event.sessionState
+	/*
+	 This event is called when the analyser has successfully established a
+	 connection with the server and the exercise has been successfully configured.
+	*/
+	func onReady(_ event: VayReadyEvent) {
 	}
 
-	// Here the state of the ENVIRONMENT and the LATENCY can be analysed
+	/*
+	 This event is called when metric values are received from the movement
+	 analysis. The event includes a list of VayMetricValues. A VayMetricValue is
+	 described by a value that belongs to a VayMetric and its confidence score.
+	*/
+	func onMetricValues(_ event: VayMetricValuesEvent) {
+	}
+
+	/*
+	 The session quality quantifies the latency and the environment. If one of
+	 these subjects changes, the VaySessionQualityChangedEvent is called where
+	 the new ratings for both subjects are provided. Possible qualities are:
+		bad - The quality is too bad to analyse images, no analysis is conducted.
+		poor - The quality is poor but still good enough to perform the movement
+			analysis, the accuracy might be affected.
+		good - The quality is optimal.
+	*/
 	func onSessionQualityChanged(_ event: VaySessionQualityChangedEvent) {
-		// Get the session quality
-		_ = event.sessionQuality
 	}
 }
 
@@ -200,7 +292,7 @@ extension UIImage {
 		return newImage
 	}
 	
-	// Mirror image along the x-axis
+	// Mirror image along the x-axis.
 	func flipHorizontally() -> UIImage? {
 		UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
 		let context = UIGraphicsGetCurrentContext()!

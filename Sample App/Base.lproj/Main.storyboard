@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -40,27 +40,35 @@
                                     <constraint firstItem="5o9-WY-4t4" firstAttribute="width" secondItem="qcO-e4-I0e" secondAttribute="width" id="xuY-2i-d8T"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Get ready!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2D-A2-LIr">
-                                <rect key="frame" x="140" y="826" width="134" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Train sideways/frontal to the camera!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jAr-tg-vuY">
-                                <rect key="frame" x="33" y="630" width="348" height="27"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Train sideways/frontal to the camera!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jAr-tg-vuY">
+                                <rect key="frame" x="32" y="611" width="350" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="9vS-uc-LVf"/>
+                                    <constraint firstAttribute="width" constant="350" id="xLh-0x-ZRs"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Correct Reps:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xzc-eo-s52">
-                                <rect key="frame" x="136.5" y="703" width="141" height="29"/>
+                                <rect key="frame" x="136.5" y="691" width="141" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5iV-fo-52T">
-                                <rect key="frame" x="194.5" y="740" width="25" height="48"/>
+                                <rect key="frame" x="194.5" y="728" width="25" height="48"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Get ready!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g2D-A2-LIr">
+                                <rect key="frame" x="72" y="801" width="270" height="46"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="270" id="bmI-6b-T12"/>
+                                    <constraint firstAttribute="height" constant="46" id="cGv-Bz-GtX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -70,24 +78,24 @@
                         <constraints>
                             <constraint firstItem="qcO-e4-I0e" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="0TK-X5-4IM"/>
                             <constraint firstItem="jAr-tg-vuY" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="37B-o8-oxf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="g2D-A2-LIr" secondAttribute="bottom" id="C3p-4g-DW9"/>
                             <constraint firstItem="qcO-e4-I0e" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.616071" id="Cmk-1K-3GL"/>
-                            <constraint firstItem="xzc-eo-s52" firstAttribute="top" secondItem="jAr-tg-vuY" secondAttribute="bottom" constant="46" id="cHB-gF-Bm6"/>
+                            <constraint firstItem="g2D-A2-LIr" firstAttribute="centerX" secondItem="5iV-fo-52T" secondAttribute="centerX" id="K1e-Ch-CYK"/>
+                            <constraint firstItem="jAr-tg-vuY" firstAttribute="top" secondItem="iGM-LM-xC5" secondAttribute="bottom" constant="15" id="RCc-zk-fbe"/>
                             <constraint firstItem="5iV-fo-52T" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="iue-3F-mf8"/>
                             <constraint firstItem="qcO-e4-I0e" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="jD8-MF-DAF"/>
                             <constraint firstItem="5iV-fo-52T" firstAttribute="top" secondItem="xzc-eo-s52" secondAttribute="bottom" constant="8" symbolic="YES" id="kFm-zD-MCr"/>
+                            <constraint firstItem="g2D-A2-LIr" firstAttribute="top" secondItem="5iV-fo-52T" secondAttribute="bottom" constant="25" id="kXU-zA-fY3"/>
                             <constraint firstItem="xzc-eo-s52" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="o5L-tL-xmN"/>
-                            <constraint firstItem="g2D-A2-LIr" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="rYJ-uP-Zbg"/>
                             <constraint firstItem="qcO-e4-I0e" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="tBn-Vo-sj6"/>
-                            <constraint firstItem="g2D-A2-LIr" firstAttribute="top" secondItem="5iV-fo-52T" secondAttribute="bottom" constant="38" id="yiB-RU-i14"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="g2D-A2-LIr" secondAttribute="bottom" constant="15" id="zSG-az-NRl"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="exerciseText" destination="g2D-A2-LIr" id="Vxb-I4-MWW"/>
                         <outlet property="feedbackText" destination="jAr-tg-vuY" id="jbJ-Hq-7Ye"/>
                         <outlet property="overlay" destination="iGM-LM-xC5" id="Ij5-5T-deF"/>
                         <outlet property="preview" destination="5o9-WY-4t4" id="IZ5-Uw-UR0"/>
-                        <outlet property="repsCount" destination="5iV-fo-52T" id="EzE-TJ-IkQ"/>
+                        <outlet property="repetitionCount" destination="5iV-fo-52T" id="EzE-TJ-IkQ"/>
+                        <outlet property="stateText" destination="g2D-A2-LIr" id="Vxb-I4-MWW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -17,7 +17,7 @@ build/
 
 *.xcuserstate
 *.xcworkspace/
-project.xcworkspace/
+*.project.xcworkspace/
 
 !default.pbxuser
 !default.mode1v3

@@ -1,6 +1,6 @@
 # IOS Sample App
 
-A minimalistic app that demonstrates some basic aspects of how to utilize [Vay's API][1].
+A minimalistic app that demonstrates some basic aspects of how to utilize the [Swift-Client][1].
 
 The single screen app's working code does the following:
 - Following [this][2] guide, camera images are extracted and passed to the view controller.
@@ -16,5 +16,5 @@ Also feel free to change the exercise key to test other exercises.
 
 ###### Important: The server address has been ommited, as this is a publicly accessable repo.
 
-[1]: https://api.docs.vay.ai/
+[1]: https://swift-api.docs.vay.ai
 [2]: https://medium.com/ios-os-x-development/ios-camera-frames-extraction-d2c0f80ed05a
